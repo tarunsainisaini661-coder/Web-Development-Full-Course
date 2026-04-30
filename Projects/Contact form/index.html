@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact form</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        width: 350px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border: 8px 0;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+
+      .error {
+        color: red;
+        font-size: 12px;
+      }
+
+      botton {
+        width: 100%;
+        padding: 10px;
+        background: #667eea;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background: #5a67d8;
+      }
+
+      .success {
+        color: green;
+        text-align: center;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Contact Us</h2>
+
+      <form id="contactForm">
+        <input type="text" id="name" placeholder="Your Name" />
+        <div id="nameError" class="error"></div>
+
+        <input type="email" id="email" placeholder="Your Email" />
+        <div id="emailError" class="error"></div>
+
+        <textarea name="message" rows="4" placeholder="Your Message"></textarea>
+        <div id="messageError" class="error"></div>
+
+        <button type="submit">Send Message</button>
+        <div id="successMsg" class="success"></div>
+      </form>
+    </div>
+
+    <script type="module">
+      // Firebase Import (from :contentReference[oaicite:0]{index=0})
+      import { initializeApp } from "https://WWW.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+      import {
+        getFirestore,
+        addDoc,
+        collection,
+      } from "https://WWW.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+      // Yaha apna config paste karo
+      const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        autoDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+        projectId: "YOUR_PROJECT_ID",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      const form = document.getElementById("contactForm");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Values
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const message = document.getElementById("message").value.trim();
+
+        // Error elements
+        const nameError = document.getElementById("nameError");
+        const emailError = document.getElementById("emailError");
+        const messageError = document.getElementById("messageError");
+        const successError = document.getElementById("successMsg");
+
+        // Reset errors
+        nameError.textContent = "";
+        emailError.textContent = "";
+        messageError.textContent = "";
+        successMsg.textContent = "";
+
+        let isValid = true;
+
+        // Validation
+        if (name === "") {
+          nameError.textContent = "Name is required";
+          isValid = false;
+        }
+
+        if (email === "") {
+          emailError.textContent = "Email is required";
+          isValid = false;
+        } else if (!email.includes("@")) {
+          emailError.textContent = "Enter valid emal";
+          isValid = false;
+        }
+
+        if (message === "") {
+          messageError.textContent = "Message is required";
+          isValid = false;
+        }
+
+        if (!isValid) return;
+
+        try {
+          await addDoc(collection(db, "contacts"), {
+            name,
+            email,
+            message,
+            createdAt: new Date(),
+          });
+
+          successMsg.textContent = "Message Sent Successfully!";
+          form.reset();
+        } catch (error) {
+          successMsg.textContent = "Error: " + error.message;
+        }
+      });
+    </script>
+  </body>
+</html>
