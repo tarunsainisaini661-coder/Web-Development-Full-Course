@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- क्या CSS वेरिएबल्स कलर्स होल्ड कर सकते हैं? 
+                     नहीं, वे केवल r वैल्यूज़ होल्ड कर सकते हैं। -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Variables</title>
+    <style>
+        :root {
+            /* Global Variable */
+            --color: rgb(255, 107, 107);
+            /* Primary Color */
+            --seccolor: rgb(60, 163, 58);
+            /* Secondary Color */
+            --defpad: 23px;
+            /* Default Padding */
+            --defop: 0.4;
+            /* Default Opacity */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav {
+            background-color: var(--color);
+        }
+
+        ul {
+            display: flex;
+        }
+
+        ul li {
+            list-style: none;
+            opacity: var(--defop);
+            padding: var(--defpad);
+            border: 12px solid var(--seccolor);
+        }
+
+        ul li:first-child {
+            --color: rgba(243, 87, 8);
+            background-color: var(--color, blue);
+        }
+
+        .container {
+            background-color: var(--seccolor);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav">
+        <ul>
+            <li>Home</li>
+            <li>About</li>
+            <li>Contact</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, unde! Ipsam architecto vero doloremque
+        distinctio, aspernatur ex, illum sint excepturi alias recusandae maiores perferendis quam ipsa. Similique
+        voluptatibus autem itaque voluptatum perferendis libero. Iste tempora quae minima provident totam nemo error
+        dolor quo minus deserunt?
+    </div>
+</body>
+
+</html>
